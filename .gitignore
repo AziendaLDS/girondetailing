@@ -1,0 +1,26 @@
+.DS_Store
+.vercel
+.venv
+/*.jpg
+/enhanced.png
+/enhanced hero.png
+/ca-fleming-electric-demo.html
+node_modules/
+package.json
+package-lock.json
+
+# Local preview / audit artifacts (not shipped)
+assets/*-preview.png
+assets/area-map-*.png
+assets/area-meta-*.png
+assets/gallery-centered-*.png
+assets/gallery-featured-*.png
+assets/gallery-grid-*.png
+assets/gallery-top-*.png
+assets/map-hover-*.png
+assets/map-hudson-*.png
+assets/map-hover-demo.webm
+assets/services-electric-preview.png
+assets/cta-lightfall-preview.png
+assets/cta-subheader-preview.png
+assets/nj-map-preview.png
