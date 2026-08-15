@@ -747,7 +747,7 @@
     .faq-q{padding:16px;}
   }
   @media (max-width:428px){
-    .service-core .sheen{display:none;}
+    .service-core .sheen{display:block;min-height:160px;}
     .hero{padding:68px 0 40px;}
     .legend-row{align-items:flex-start;}
     .legend-note{margin-left:auto;max-width:55%;}
@@ -800,6 +800,7 @@
       loop
       autoplay
       playsinline
+      webkit-playsinline
       preload="auto"
       poster="assets/hero-video.jpg"
       disablepictureinpicture
@@ -878,9 +879,12 @@
         class="about-video"
         muted
         loop
+        autoplay
         playsinline
-        preload="metadata"
+        webkit-playsinline
+        preload="auto"
         poster="assets/service-mobile.jpg"
+        disablepictureinpicture
         aria-label="Giron Detailing van on a driveway next to a Range Rover"
       >
         <source src="assets/service-mobile.mp4" type="video/mp4">
@@ -902,9 +906,12 @@
             class="service-core-video"
             muted
             loop
+            autoplay
             playsinline
-            preload="metadata"
+            webkit-playsinline
+            preload="auto"
             poster="assets/service-core.jpg"
+            disablepictureinpicture
             aria-label="Giron Detailing van and technician detailing a car in a driveway"
           >
             <source src="assets/service-core.mp4" type="video/mp4">
@@ -1346,59 +1353,79 @@
     });
   });
 
-  (function initHeroVideo() {
-    const video = document.querySelector('.hero-video');
-    if (!video) return;
-    video.muted = true;
-    video.defaultMuted = true;
-    video.loop = true;
-    video.playsInline = true;
+  (function initLoopingVideos() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      video.removeAttribute('autoplay');
-      video.pause();
-      return;
+    const videos = [
+      document.querySelector('.hero-video'),
+      document.querySelector('.about-video'),
+      document.querySelector('.service-core-video'),
+    ].filter(Boolean);
+
+    function arm(video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.setAttribute('muted', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('loop', '');
+
+      if (reduced) {
+        video.removeAttribute('autoplay');
+        video.pause();
+        return;
+      }
+
+      let inView = false;
+      let restarting = false;
+      const play = () => {
+        if (!inView || document.visibilityState === 'hidden') return;
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      };
+      const restart = () => {
+        if (restarting || !inView) return;
+        restarting = true;
+        try { video.currentTime = 0; } catch (_) {}
+        play();
+        window.setTimeout(() => { restarting = false; }, 400);
+      };
+
+      video.addEventListener('ended', restart);
+      // Safari/iOS often freezes at the last frame and never fires ended with loop.
+      video.addEventListener('timeupdate', () => {
+        if (!video.duration || !isFinite(video.duration) || video.paused) return;
+        if (video.currentTime >= video.duration - 0.05) restart();
+      });
+      video.addEventListener('stalled', play);
+      video.addEventListener('suspend', () => {
+        if (inView && video.paused && !video.ended) play();
+      });
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          inView = entry.isIntersecting;
+          if (inView) play();
+          else video.pause();
+        });
+      }, { threshold: 0.12, rootMargin: '48px 0px' });
+      io.observe(video);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && inView) play();
+      });
+      window.addEventListener('pageshow', () => {
+        if (inView) play();
+      });
+
+      // Kick once for anything already on screen before observe settles.
+      const rect = video.getBoundingClientRect();
+      inView = rect.bottom > 40 && rect.top < window.innerHeight - 40;
+      if (inView) play();
     }
-    const play = () => { video.play().catch(() => {}); };
-    video.addEventListener('ended', () => {
-      video.currentTime = 0;
-      play();
-    });
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) play();
-        else video.pause();
-      });
-    }, { threshold: 0.2 });
-    io.observe(video);
-  })();
 
-  (function initAboutVideo() {
-    const video = document.querySelector('.about-video');
-    if (!video) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      });
-    }, { threshold: 0.35 });
-    io.observe(video);
-  })();
-
-  (function initServiceCoreVideo() {
-    const video = document.querySelector('.service-core-video');
-    if (!video) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      });
-    }, { threshold: 0.35 });
-    io.observe(video);
+    videos.forEach(arm);
   })();
 
   (function initWorkGallery() {
