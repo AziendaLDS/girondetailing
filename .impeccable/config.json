@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-08-14T23:23:37.834Z",
+        "reason": "User asked for an infinite-loop logo carousel"
+      },
+      {
+        "rule": "single-font",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-08-14T23:59:26.461Z",
+        "reason": "User asked to apply Tektur to the entire website"
+      }
+    ]
+  }
+}
