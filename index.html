@@ -431,12 +431,30 @@
   .review-viewport.is-swipe .review-track{animation:none;width:max-content;}
   .review-viewport.is-swipe .review-set[aria-hidden="true"]{display:none;}
   .review-viewport.is-swipe .review-card{
-    flex-basis:min(22rem, calc(100cqw - 28px));
+    flex-basis:calc(100cqw - 32px);
     scroll-snap-align:start;
   }
-  @media (max-width:1024px) and (min-width:641px){
-    .review-card{flex-basis:calc((100cqw - 16px) / 2);}
-    .review-viewport.is-swipe .review-card{flex-basis:calc((100cqw - 16px) / 2);}
+  @media (max-width:640px){
+    .review-viewport.is-swipe .review-set{gap:0;padding-right:0;}
+    .review-viewport.is-swipe .review-card{
+      flex-basis:100cqw;
+      scroll-snap-align:start;
+      scroll-snap-stop:always;
+    }
+  }
+  @media (min-width:641px) and (max-width:1024px) and (orientation:portrait){
+    .review-card,
+    .review-viewport.is-swipe .review-card{
+      flex-basis:calc((100cqw - 16px) / 2);
+    }
+  }
+  @media (min-width:768px) and (max-width:1180px) and (orientation:landscape){
+    .review-viewport{mask-image:none;}
+    .review-viewport.is-swipe .review-set{gap:16px;padding-right:0;}
+    .review-card,
+    .review-viewport.is-swipe .review-card{
+      flex-basis:calc((100cqw - 32px) / 3);
+    }
   }
   @media (prefers-reduced-motion: reduce){
     .review-track{animation:none;}
@@ -446,10 +464,23 @@
 
   .area-grid{
     display:grid;grid-template-columns:minmax(240px,0.78fr) 1.22fr;
-    gap:40px;align-items:start;
+    grid-template-areas:
+      "map intro"
+      "map aside";
+    gap:40px 40px;align-items:start;
   }
+  .area-map{grid-area:map;}
+  .area-intro{grid-area:intro;}
+  .area-aside{grid-area:aside;}
   @media (max-width:820px){
-    .area-grid{grid-template-columns:1fr;gap:28px;}
+    .area-grid{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "intro"
+        "map"
+        "aside";
+      gap:28px;
+    }
     .area-map{max-width:min(520px,100%);width:100%;margin:0 auto;}
   }
   .area-map{
@@ -534,8 +565,8 @@
     transition:opacity 120ms ease;
   }
   .map-tooltip.is-visible{opacity:1;}
-  .area-copy h2{font-size:var(--text-heading);margin-bottom:14px;}
-  .area-copy .lede{color:var(--mute);margin-bottom:22px;max-width:52ch;}
+  .area-intro h2{font-size:var(--text-heading);margin-bottom:14px;}
+  .area-intro .lede{color:var(--mute);margin-bottom:22px;max-width:52ch;}
   .legend-row{
     display:flex;align-items:center;gap:14px;
     padding:12px 0;border-top:1px solid var(--line);font-size:var(--text-caption);
@@ -548,9 +579,9 @@
     letter-spacing:0.08em;text-transform:uppercase;
   }
   .legend-note{margin-left:auto;color:var(--mute);font-size:var(--text-micro);}
-  .area-verify{color:var(--mute);font-size:var(--text-caption);margin-top:var(--space-md);}
+  .area-verify{color:var(--mute);font-size:var(--text-caption);margin-top:0;}
   .area-check{
-    margin-top:var(--space-lg);
+    margin-top:var(--space-md);
     background:var(--ink-2);
     border:1px solid var(--line);
     border-radius:var(--radius-md);
@@ -560,14 +591,30 @@
   .area-check .field:last-of-type{margin-bottom:14px;}
   .area-check .field input{padding:10px 12px;}
 
-  .contact-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:stretch;}
-  @media (max-width:820px){.contact-grid{grid-template-columns:1fr;gap:32px;}}
-  .contact-copy{display:flex;flex-direction:column;min-height:0;}
-  .contact-copy h2{font-size:var(--text-heading);margin-bottom:12px;}
-  .contact-copy > p{color:var(--mute);margin-bottom:18px;max-width:42ch;}
+  .contact-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:stretch;
+    grid-template-areas:
+      "form intro"
+      "form cards";
+  }
+  .quote-form{grid-area:form;}
+  .contact-intro{grid-area:intro;}
+  .contact-cards{grid-area:cards;}
+  @media (max-width:820px){
+    .contact-grid{
+      grid-template-columns:1fr;gap:32px;
+      grid-template-areas:
+        "intro"
+        "form"
+        "cards";
+    }
+  }
+  .contact-intro{display:flex;flex-direction:column;min-height:0;}
+  .contact-intro h2{font-size:var(--text-heading);margin-bottom:12px;}
+  .contact-intro > p{color:var(--mute);margin-bottom:0;max-width:42ch;}
   .contact-cards{
     display:grid;grid-template-rows:repeat(4,minmax(76px,1fr));
-    gap:12px;margin-top:28px;flex:1 1 auto;
+    gap:12px;flex:1 1 auto;align-self:stretch;
   }
   .contact-card{
     display:flex;align-items:center;gap:16px;
@@ -680,7 +727,7 @@
     .service-core .sheen{min-height:200px;}
     .service-item{padding:14px 16px;flex:1 1 auto;}
     .legend-note{min-width:0;text-align:right;}
-    .contact-cards{grid-template-rows:none;gap:10px;margin-top:20px;}
+    .contact-cards{grid-template-rows:none;gap:10px;margin-top:0;}
     .quote-form{padding:22px 18px;height:auto;}
     .footer-inner{flex-direction:column;align-items:flex-start;gap:12px;}
     footer a[href^="tel"]{min-height:44px;display:inline-flex;align-items:center;}
@@ -1068,10 +1115,7 @@
 
 <section class="area" id="area">
   <div class="wrap area-grid">
-    <div class="area-map" id="areaMap">
-      <div class="map-tooltip" id="mapTooltip" aria-hidden="true"></div>
-    </div>
-    <div class="area-copy">
+    <div class="area-intro">
       <h2>Where we work</h2>
       <p class="lede">Based in Trenton, Mercer County. Mobile service means the shop comes to you. Detailing Giron covers Trenton and the surrounding New Jersey area.</p>
       <div class="area-legend">
@@ -1086,6 +1130,11 @@
           <span class="legend-note" id="legendHoverNote">Hover a county</span>
         </div>
       </div>
+    </div>
+    <div class="area-map" id="areaMap">
+      <div class="map-tooltip" id="mapTooltip" aria-hidden="true"></div>
+    </div>
+    <div class="area-aside">
       <p class="area-verify">Outside Mercer County? Ask when you request a quote and we will confirm the drive. (verify)</p>
       <form class="area-check" id="areaCheckForm" aria-label="Check my area">
         <div class="field">
@@ -1136,48 +1185,9 @@
   <div id="contactHyperspeed" aria-hidden="true"></div>
   <div class="contact-hyperspeed-veil" aria-hidden="true"></div>
   <div class="wrap contact-grid">
-    <div class="contact-copy">
+    <div class="contact-intro">
       <h2>Get a quote</h2>
       <p>Tell us the car, the service, and where you are parked. On a phone, submit opens a text to the shop.</p>
-      <div class="contact-cards">
-        <a class="contact-card" href="tel:+16096323712">
-          <span class="contact-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M7 3.5h3.2l.9 3.6-2 1.2a11 11 0 006.6 6.6l1.2-2 3.6.9V17c0 .8-.7 1.5-1.5 1.5C10.2 18.5 5.5 13.8 5.5 5c0-.8.7-1.5 1.5-1.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="contact-card-text">
-            <span class="contact-card-label">Call or text</span>
-            <span class="contact-card-value">(609) 632-3712</span>
-          </span>
-        </a>
-        <a class="contact-card" href="mailto:detailinggiron1@gmail.com">
-          <span class="contact-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5.5" width="17" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4.2 7.2 12 13l7.8-5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="contact-card-text">
-            <span class="contact-card-label">Email</span>
-            <span class="contact-card-value">detailinggiron1@gmail.com</span>
-          </span>
-        </a>
-        <a class="contact-card" href="https://maps.google.com/?q=306+Hudson+St,+Trenton,+NJ+08611" target="_blank" rel="noopener noreferrer">
-          <span class="contact-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-6.2 6.5-11A6.5 6.5 0 0 0 12 3.5 6.5 6.5 0 0 0 5.5 10c0 4.8 6.5 11 6.5 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg>
-          </span>
-          <span class="contact-card-text">
-            <span class="contact-card-label">Address</span>
-            <span class="contact-card-value">306 Hudson St, Trenton, NJ 08611</span>
-            <span class="contact-card-sub">Mobile around Mercer County</span>
-          </span>
-        </a>
-        <div class="contact-card">
-          <span class="contact-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v4.5l3 1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="contact-card-text">
-            <span class="contact-card-label">Hours</span>
-            <span class="contact-card-value">Monday through Sunday, 9-5</span>
-          </span>
-        </div>
-      </div>
     </div>
     <aside class="quote-form" id="quoteForm" aria-label="Request a quote">
       <form class="interest-form">
@@ -1218,6 +1228,45 @@
         </div>
       </form>
     </aside>
+    <div class="contact-cards">
+        <a class="contact-card" href="tel:+16096323712">
+          <span class="contact-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7 3.5h3.2l.9 3.6-2 1.2a11 11 0 006.6 6.6l1.2-2 3.6.9V17c0 .8-.7 1.5-1.5 1.5C10.2 18.5 5.5 13.8 5.5 5c0-.8.7-1.5 1.5-1.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="contact-card-text">
+            <span class="contact-card-label">Call or text</span>
+            <span class="contact-card-value">(609) 632-3712</span>
+          </span>
+        </a>
+        <a class="contact-card" href="mailto:detailinggiron1@gmail.com">
+          <span class="contact-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5.5" width="17" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4.2 7.2 12 13l7.8-5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="contact-card-text">
+            <span class="contact-card-label">Email</span>
+            <span class="contact-card-value">detailinggiron1@gmail.com</span>
+          </span>
+        </a>
+        <a class="contact-card" href="https://maps.google.com/?q=306+Hudson+St,+Trenton,+NJ+08611" target="_blank" rel="noopener noreferrer">
+          <span class="contact-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-6.2 6.5-11A6.5 6.5 0 0 0 12 3.5 6.5 6.5 0 0 0 5.5 10c0 4.8 6.5 11 6.5 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg>
+          </span>
+          <span class="contact-card-text">
+            <span class="contact-card-label">Address</span>
+            <span class="contact-card-value">306 Hudson St, Trenton, NJ 08611</span>
+            <span class="contact-card-sub">Mobile around Mercer County</span>
+          </span>
+        </a>
+        <div class="contact-card">
+          <span class="contact-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v4.5l3 1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="contact-card-text">
+            <span class="contact-card-label">Hours</span>
+            <span class="contact-card-value">Monday through Sunday, 9-5</span>
+          </span>
+        </div>
+    </div>
   </div>
 </section>
 
