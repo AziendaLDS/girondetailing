@@ -28,7 +28,7 @@ Static HTML site cloned from a prior local-service template. Quote forms open an
 - Ceramic coating: unconfirmed. A Google review mentions ceramic wax, which is not ceramic coating. Do not list coating as a service until verified.
 - Consignment: confirmed as vehicle prep to maximize appeal. The live-site FAQ claim that they handle advertising, negotiation, and the full sale is unverified and must not be stated as fact.
 - Phone to use: 609-632-3712 (Instagram bio, GBP JSON-LD, directories). The live site click-to-call uses 609-692-1908. Flag that discrepancy; do not use 609-692-1908.
-- Email: detailinggiron@gmail.com
+- Email: detailinggiron1@gmail.com
 - Instagram: @detailing_giron_1
 - Hours: live site publishes Mon-Sun 8:00am-6:00pm. Directories list 9:00am-5:00pm. Unverified which is current.
 - Address: three conflicting listings (46 Bayard St, 306 Hudson St, 823 Division St, all Trenton 08611). Treat as mobile / Trenton-based until confirmed. Do not pick a street address as the shop.

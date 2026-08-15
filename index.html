@@ -146,7 +146,7 @@
     .sheen::after{display:none;}
     .btn{transition:background 180ms ease;}
     .btn:active{transform:none;}
-    .service-core img,.gallery-item img{transition:none;transform:none;}
+    .gallery-item img{transition:none;transform:none;}
   }
 
   header.site{
@@ -194,6 +194,11 @@
   .hero-content{
     position:relative;z-index:2;padding:32px var(--space-lg) 0;max-width:1120px;margin:0 auto;width:100%;
     display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,420px);gap:40px;align-items:center;
+  }
+  .hero-eyebrow{
+    font-size:var(--text-caption);font-weight:700;
+    letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--red);margin-bottom:8px;
   }
   .hero h1{font-size:var(--text-display);max-width:14ch;margin-bottom:var(--space-md);}
   .hero .lede{font-size:var(--text-lede);max-width:38ch;color:var(--mute);margin-bottom:var(--space-lg);}
@@ -285,16 +290,14 @@
     display:flex;flex-direction:column;height:100%;
     border-radius:var(--radius-md);overflow:hidden;
   }
-  .service-core .sheen{flex:1 1 auto;min-height:220px;}
-  .service-core img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-  .service-core-copy{padding:28px 26px 26px;display:flex;flex-direction:column;gap:12px;flex:none;}
-  .svc-kicker{
-    font-family:'Tektur',sans-serif;font-weight:700;
-    font-size:var(--text-caption);letter-spacing:0.14em;text-transform:uppercase;color:var(--red);
+  .service-core .sheen{flex:1 1 auto;min-height:320px;background:var(--ink);}
+  .service-core video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 42%;
   }
+  .service-core-copy{padding:28px 26px 26px;display:flex;flex-direction:column;gap:12px;flex:none;}
   .service-core-copy h3{font-size:var(--text-subhead);}
   .service-core-copy p{color:var(--mute);}
-  .service-core-note{font-size:var(--text-caption);color:var(--mute);}
   .service-core-copy .btn{margin-top:4px;align-self:flex-start;}
   .service-stack{display:flex;flex-direction:column;gap:12px;height:100%;min-height:0;}
   .service-item{
@@ -308,10 +311,8 @@
     text-transform:none;letter-spacing:0;font-weight:700;line-height:1.15;
   }
   .service-item p{color:var(--mute);font-size:var(--text-sm);font-weight:400;}
-  .service-core img{transition:transform 520ms var(--ease-out);}
   .service-item h3{transition:color 180ms ease;}
   @media (hover: hover) and (pointer: fine){
-    .service-core:hover img{transform:scale(1.05);}
     .service-core:hover::before,
     .service-item:hover::before{animation-duration:2s;}
     .service-item:hover{background:var(--ink-3);}
@@ -656,6 +657,7 @@
   </div>
   <div class="hero-content">
     <div class="hero-copy">
+      <p class="hero-eyebrow">SHINE · PROTECTION · PERFECTION</p>
       <h1>Showroom shine.<br>We come to you.</h1>
       <p class="lede">Interior and exterior detailing for enthusiast cars and consignment vehicles in Trenton.</p>
       <div class="hero-ctas">
@@ -681,7 +683,6 @@
             <select id="hero-job" name="job" required>
               <option value="" disabled selected>Select A Service</option>
               <option>Mobile Auto Detailing</option>
-              <option>Complete Detailing Services</option>
               <option>Hand Wash &amp; Wax</option>
               <option>Interior Detail</option>
               <option>Exterior Detail</option>
@@ -754,9 +755,8 @@
   <div class="wrap about-grid">
     <div class="about-copy">
       <h2>Dealer-ready work. On your driveway.</h2>
-      <p>Detailing Giron 1 LLC is a Trenton shop that treats daily drivers and consignment cars with the same standard: deep cleaning, premium shine, and a finish that holds up in the lot.</p>
-      <p>We have more than <strong>14 years</strong> of detailing experience. The work is mobile. We bring water and equipment, so you do not have to leave home, the office, or street parking.</p>
-      <p>Interior vacuum and wipe-down. Exterior wash, wax, and polish. Tire dressing. Prep for dealerships and consignment so the car looks sold before anyone sits in it.</p>
+      <p>More than 14 years of detailing cars to a dealership standard: the kind of clean that holds up before a sale, not just after a wash. (verify)</p>
+      <p>No shop to drop off at. The team brings the water and equipment straight to you.</p>
     </div>
     <div class="about-photo sheen">
       <img src="assets/work-console.jpg" width="1200" height="800" alt="Detailer wiping a tan leather center console" loading="lazy">
@@ -765,7 +765,6 @@
 </section>
 
 <section id="services">
-  <!-- [VERIFY] Headlight restoration and water damage repair come from the supplied service list, not the live Giron menu. -->
   <div class="wrap">
     <div class="section-head">
       <h2>What we do.</h2>
@@ -774,23 +773,25 @@
     <div class="services-board">
       <article class="service-core">
         <div class="sheen">
-          <img src="assets/work-footwell.jpg" width="1200" height="800" alt="Detailer vacuuming a vehicle footwell" loading="lazy">
+          <video
+            class="service-core-video"
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="assets/service-mobile.jpg"
+            aria-label="Giron Detailing van on a driveway next to a Range Rover"
+          >
+            <source src="assets/service-mobile.mp4" type="video/mp4">
+          </video>
         </div>
         <div class="service-core-copy">
-          <p class="svc-kicker">Core service</p>
-          <h3>Complete Detailing Services</h3>
-          <p>Full interior and exterior in one visit. Deep cleaning and premium shine for daily drivers and consignment cars.</p>
+          <h3>Mobile Auto Detailing</h3>
+          <p>We come to you. Home, work, or street parking. The team brings water and equipment.</p>
           <a class="btn" href="#contact">Request a quote</a>
         </div>
       </article>
       <div class="service-stack">
-        <article class="service-item">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div>
-            <h3>Mobile Auto Detailing</h3>
-            <p>We come to you. Home, work, or street parking. The team brings water and equipment.</p>
-          </div>
-        </article>
         <article class="service-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3c3 4.5 6 7.2 6 11a6 6 0 1 1-12 0c0-3.8 3-6.5 6-11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           <div>
@@ -835,7 +836,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Our work</h2>
-      <p>A few shots from jobs we have done. More photos coming.</p>
+      <p>Recent work, straight from the driveway.</p>
     </div>
     <div class="gallery">
       <figure class="gallery-item wide sheen">
@@ -865,97 +866,97 @@
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Excellent service. Highly recommended.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Arcely E.</strong> · Google review</p>
+            <p class="review-meta"><strong>Arcely E.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Excellent work. Highly recommended, very satisfied.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Glenda R.</strong> · Google review</p>
+            <p class="review-meta"><strong>Glenda R.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Professionally and expertly done auto detailing! Would strongly recommend anytime.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Okwu I.</strong> · Google review</p>
+            <p class="review-meta"><strong>Okwu I.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Best detailers in the game. I don't trust anyone else with my car!</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Anthony Z.</strong> · Google review</p>
+            <p class="review-meta"><strong>Anthony Z.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Very professional customer service, and my car has never been cleaner. I have been using Hugo and the crew for years.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Jim G.</strong> · Google review</p>
+            <p class="review-meta"><strong>Jim G.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Great customer service and an excellent job! My husband and I bought a used car a couple of months ago that had some wear and tear as well as stains. When Giron Detailing was done, our car looked brand new. We love the end result and absolutely recommend them.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Jemira D.</strong> · Google review</p>
+            <p class="review-meta"><strong>Jemira D.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">I really like their work, and they are very professional and efficient. I will definitely recommend them.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>King L.</strong> · Google review</p>
+            <p class="review-meta"><strong>King L.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">They're excellent! I bought a car at auction that I couldn't see in person, and it arrived filthy. I didn't know how to clean the interior myself, so I called them, and they left it spotless. They're fantastic! I highly recommend them. I couldn't be there to thank them personally, but I'll have to share my tip for next time. Their prices were also reasonable and fair!</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Aprendiendo J.</strong> · Google review</p>
+            <p class="review-meta"><strong>Aprendiendo J.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">They did an absolutely amazing job on my CX-9! It looks brand new inside and out, and they were very reasonably priced. I will definitely use them again in the future.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Mary F.</strong> · Google review</p>
+            <p class="review-meta"><strong>Mary F.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Excellent, professional, and hard work. Good quality. God bless you all. Appreciate it. Muchas gracias. Bendiciones.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>God Bless America USA</strong> · Google review</p>
+            <p class="review-meta"><strong>God Bless America USA</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="4 stars">★★★★<span class="off">★</span></div>
             <blockquote class="review-quote">My car has been rejuvenated with a thorough detailing inside and out!</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Kristin N.</strong> · Google review</p>
+            <p class="review-meta"><strong>Kristin N.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">I have personally known the owner (Hugo) for over 3 years, but before we talk about the way he details cars, you should know the man behind the power washer. Hugo has helped me out of some jams in the past and will always give you the shirt off his back. When it comes to detailing cars, Hugo and my father are the only ones to touch my car because of the level of detailing that Hugo pays attention to. Hugo has personally cleaned my cars and my family's cars, beginning with my 2018 Audi S5, my 2009 Volkswagen, 2012 GL450, 2014 GLI, and 2015 Porsche Panamera. To focus on the Volkswagen: this car has seen its fair share of dirt among other things. When I get my VW back from Hugo, you would have thought it was brand new. Hugo knows how protective I am of my cars and is always extremely respectful of everything in my car. I highly recommend his work for any car or boat. In addition, whenever my friends from Vermont come down here, they always come to Hugo to remove the Vermont winter off their cars.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Markydiamond</strong> · Google review</p>
+            <p class="review-meta"><strong>Markydiamond</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">My Jeep hasn't looked this fresh since I picked it up from the dealership. The interior is clean and smells nice, and the outside has a mirror finish. A++. Will use again.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Edward L.</strong> · Google review</p>
+            <p class="review-meta"><strong>Edward L.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">My car hasn't looked this good since I bought it new! I am so glad to have found a reputable mobile detailing company because it took the hassle out of car servicing: they came directly to me. I have street parking and was nervous they wouldn't have room. They found a perfect spot, used their own water so they don't need to hook up to your line, and my car is sparkling. I 100% recommend this business and I will never go elsewhere. You also cannot beat the prices!</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Nicole P.</strong> · Google review</p>
+            <p class="review-meta"><strong>Nicole P.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">This guy is the best. Hugo goes above and beyond when working on a car's finish like it is his own. It's like his goal to bring out the vehicle's intended beauty. Only guy who touches my truck's paint. A1 quality, top notch.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Jonathan M.</strong> · Google review</p>
+            <p class="review-meta"><strong>Jonathan M.</strong></p>
           </article>
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Hugo and his team are professional and extremely talented. I had my BMW paint corrected and protected with ceramic wax. Truly brought my car and its paint back to life. I strongly recommend using them for any of your detailing needs.</blockquote>
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
-            <p class="review-meta"><strong>Nicholas L.</strong> · Google review</p>
+            <p class="review-meta"><strong>Nicholas L.</strong></p>
           </article>
         </div>
       </div>
@@ -972,8 +973,8 @@
       <div class="map-tooltip" id="mapTooltip" aria-hidden="true"></div>
     </div>
     <div class="area-copy">
-      <h2>Trenton, and the drive around it.</h2>
-      <p class="lede">Based in Trenton, Mercer County. Mobile service means the bay comes to you. Google lists the business as covering Trenton and the surrounding New Jersey area.</p>
+      <h2>Where we work</h2>
+      <p class="lede">Based in Trenton, Mercer County. Mobile service means the shop comes to you. Detailing Giron covers Trenton and the surrounding New Jersey area.</p>
       <div class="area-legend">
         <div class="legend-row">
           <span class="legend-swatch home"></span>
@@ -986,7 +987,7 @@
           <span class="legend-note" id="legendHoverNote">Hover a county</span>
         </div>
       </div>
-      <p class="area-verify">Surrounding counties on the map are a planning view of nearby NJ. Confirm coverage when you book.</p>
+      <p class="area-verify">Outside Mercer County? Ask when you request a quote and we will confirm the drive. (verify)</p>
     </div>
   </div>
 </section>
@@ -1003,11 +1004,11 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Do you come to me?<span class="faq-icon" aria-hidden="true">+</span></button>
-        <div class="faq-a"><div class="faq-a-inner"><p>Yes. Mobile service is a listed offering. The team comes to your home or workplace. A Google review says they use their own water and can work street parking.</p></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. The team comes to your home or workplace with their own water and equipment, so street parking works fine too.</p></div></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Do you work with dealerships?<span class="faq-icon" aria-hidden="true">+</span></button>
-        <div class="faq-a"><div class="faq-a-inner"><p>Yes. The shop lists dealership detailing, lot washing, and prep for sales or display so consignment and dealer cars sit showroom-ready.</p></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Yes. Dealership detailing, lot washing, and prep for sale or display, so consignment and dealer cars are showroom-ready.</p></div></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">How often should the interior be done?<span class="faq-icon" aria-hidden="true">+</span></button>
@@ -1015,7 +1016,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Do you offer ceramic coating?<span class="faq-icon" aria-hidden="true">+</span></button>
-        <div class="faq-a"><div class="faq-a-inner"><p>Ceramic coating is not on the published service list. A Google review mentions paint correction and ceramic wax on a BMW. Ask when you request a quote if you want paint protection discussed.</p></div></div>
+        <div class="faq-a"><div class="faq-a-inner"><p>Ceramic coating isn't part of the standard service list, but paint correction and ceramic wax are available on request. Ask when you request a quote. (verify)</p></div></div>
       </div>
     </div>
   </div>
@@ -1038,13 +1039,13 @@
             <span class="contact-card-value">(609) 632-3712</span>
           </span>
         </a>
-        <a class="contact-card" href="mailto:detailinggiron@gmail.com">
+        <a class="contact-card" href="mailto:detailinggiron1@gmail.com">
           <span class="contact-card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5.5" width="17" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4.2 7.2 12 13l7.8-5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
           <span class="contact-card-text">
             <span class="contact-card-label">Email</span>
-            <span class="contact-card-value">detailinggiron@gmail.com</span>
+            <span class="contact-card-value">detailinggiron1@gmail.com</span>
           </span>
         </a>
         <a class="contact-card" href="https://maps.google.com/?q=306+Hudson+St,+Trenton,+NJ+08611" target="_blank" rel="noopener noreferrer">
@@ -1086,7 +1087,6 @@
             <select id="job" name="job" required>
               <option value="" disabled selected>Select A Service</option>
               <option>Mobile Auto Detailing</option>
-              <option>Complete Detailing Services</option>
               <option>Hand Wash &amp; Wax</option>
               <option>Interior Detail</option>
               <option>Exterior Detail</option>
@@ -1173,6 +1173,20 @@
       wrap?.classList.add('sent');
     });
   });
+
+  (function initServiceVideo() {
+    const video = document.querySelector('.service-core-video');
+    if (!video) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.35 });
+    io.observe(video);
+  })();
 
   document.querySelectorAll('.faq-q').forEach((btn) => {
     btn.addEventListener('click', () => {
