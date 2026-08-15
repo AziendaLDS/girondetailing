@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
 <link rel="preload" as="font" href="assets/fonts/Tektur-Variable.ttf" type="font/ttf" crossorigin>
-<link rel="preload" as="image" href="assets/hero.jpg">
+<link rel="preload" as="image" href="assets/hero-video.jpg">
 <script type="importmap">
 {
   "imports": {
@@ -117,7 +117,8 @@
   }
   .btn.ghost:hover{border-color:var(--paper);background:transparent;}
   .btn.full{width:100%;}
-  .btn:focus-visible,.nav-links a:focus-visible,.faq-q:focus-visible,.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,.skip:focus-visible,.footer-social:focus-visible,.review-nav:focus-visible,.read-more:focus-visible,.contact-card:focus-visible{
+  .btn[hidden]{display:none;}
+  .btn:focus-visible,.nav-links a:focus-visible,.faq-q:focus-visible,.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,.skip:focus-visible,.footer-social:focus-visible,.read-more:focus-visible,.contact-card:focus-visible,.gallery-more:focus-visible{
     outline:2px solid var(--red);outline-offset:3px;
   }
 
@@ -146,25 +147,37 @@
     .sheen::after{display:none;}
     .btn{transition:background 180ms ease;}
     .btn:active{transform:none;}
-    .gallery-item img{transition:none;transform:none;}
+    .service-core img,.service-core video{transition:none;transform:none;}
   }
-
   header.site{
     position:fixed;top:0;left:0;right:0;z-index:100;
-    background:var(--ink);
-    border-bottom:1px solid var(--line);
+    background:transparent;border-bottom:1px solid transparent;
+    transition:background 280ms ease, border-color 280ms ease;
   }
-  nav{display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-lg);max-width:1120px;margin:0 auto;height:68px;}
-  .logo{display:flex;align-items:center;flex-shrink:0;}
+  header.site.is-solid{
+    background:var(--ink);border-bottom-color:var(--line);
+  }
+  nav{display:flex;align-items:center;padding:0 var(--space-lg);max-width:1120px;margin:0 auto;height:68px;position:relative;}
+  .logo{display:flex;align-items:center;flex-shrink:0;z-index:1;}
   .logo img{height:44px;width:auto;}
-  .nav-links{display:flex;gap:26px;align-items:center;}
-  .nav-links a{color:var(--paper);font-size:var(--text-sm);font-weight:600;letter-spacing:0.02em;}
-  .nav-links a:hover{color:var(--red);}
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-links a:not(.btn){color:var(--paper);font-size:var(--text-sm);font-weight:600;letter-spacing:0.02em;}
+  header.site:not(.is-solid) .nav-links a:not(.btn){
+    text-shadow:0 1px 10px color-mix(in srgb, var(--ink) 75%, transparent);
+  }
+  .nav-links a:not(.btn):hover{color:var(--red);}
+  .nav-quote{margin-left:auto;z-index:1;flex-shrink:0;}
+  .nav-quote-menu{display:none;}
   .nav-toggle{
     display:none;background:none;border:none;color:var(--paper);cursor:pointer;
     width:44px;height:44px;align-items:center;justify-content:center;padding:0;
   }
   .nav-toggle svg{display:block;}
+  @media (min-width:821px){
+    .nav-links{
+      position:absolute;left:50%;transform:translateX(-50%);
+    }
+  }
   @media (max-width:820px){
     .nav-links{
       position:fixed;top:68px;left:0;right:0;
@@ -174,8 +187,9 @@
       border-bottom:1px solid var(--line);
     }
     .nav-links.open{transform:translateY(0);visibility:visible;pointer-events:auto;}
-    .nav-toggle{display:inline-flex;}
-    .nav-links .btn{width:100%;}
+    .nav-toggle{display:inline-flex;margin-left:auto;}
+    .nav-quote{display:none;}
+    .nav-quote-menu{display:inline-flex;width:100%;}
   }
 
   .hero{
@@ -184,29 +198,33 @@
     padding:68px 0 56px;
   }
   .hero-media{position:absolute;inset:0;}
-  .hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 60%;}
-  .hero-media::after{
-    content:"";position:absolute;inset:0;
-    background:
-      linear-gradient(90deg, color-mix(in srgb, var(--ink) 88%, transparent) 0%, color-mix(in srgb, var(--ink) 45%, transparent) 48%, color-mix(in srgb, var(--ink) 20%, transparent) 100%),
-      linear-gradient(180deg, color-mix(in srgb, var(--ink) 20%, transparent) 0%, color-mix(in srgb, var(--ink) 92%, transparent) 100%);
+  .hero-media video{
+    width:100%;height:100%;object-fit:cover;object-position:center;display:block;
   }
   .hero-content{
     position:relative;z-index:2;padding:32px var(--space-lg) 0;max-width:1120px;margin:0 auto;width:100%;
-    display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,420px);gap:40px;align-items:center;
+    display:flex;justify-content:center;
+  }
+  .hero-copy{
+    text-align:center;display:flex;flex-direction:column;align-items:center;
+    text-shadow:0 2px 16px color-mix(in srgb, var(--ink) 65%, transparent);
+  }
+  img.hero-logo{
+    display:block;height:72px;width:auto;margin-bottom:var(--space-md);
+    filter:drop-shadow(0 2px 16px color-mix(in srgb, var(--ink) 70%, transparent));
   }
   .hero-eyebrow{
+    position:absolute;top:68px;left:0;right:0;z-index:2;
     font-size:var(--text-caption);font-weight:700;
-    letter-spacing:0.16em;text-transform:uppercase;
-    color:var(--red);margin-bottom:8px;
+    letter-spacing:0.16em;text-transform:uppercase;text-align:center;
+    color:var(--red);margin:0;padding:14px var(--space-lg) 0;
+    text-shadow:0 2px 16px color-mix(in srgb, var(--ink) 65%, transparent);
   }
-  .hero h1{font-size:var(--text-display);max-width:14ch;margin-bottom:var(--space-md);}
-  .hero .lede{font-size:var(--text-lede);max-width:38ch;color:var(--mute);margin-bottom:var(--space-lg);}
-  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
-  @media (max-width:820px){
-    .hero-content{grid-template-columns:1fr;gap:32px;align-items:stretch;}
-  }
+  .hero h1{font-size:var(--text-display);max-width:16ch;margin-bottom:var(--space-md);}
+  .hero .lede{font-size:var(--text-lede);max-width:42ch;color:var(--mute);margin-bottom:var(--space-lg);}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
   @media (max-width:560px){
+    img.hero-logo{height:60px;}
     .hero-ctas{flex-direction:column;align-items:stretch;}
     .hero-ctas .btn{width:100%;}
   }
@@ -274,11 +292,15 @@
 
   .about-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;}
   @media (max-width:820px){.about-grid{grid-template-columns:1fr;gap:28px;}}
+  #about{padding:48px 0;}
   .about-copy h2{font-size:var(--text-heading);margin-bottom:var(--space-md);}
   .about-copy p{color:var(--mute);margin-bottom:14px;max-width:52ch;}
   .about-copy p strong{color:var(--paper);font-weight:600;}
-  .about-photo{border-radius:var(--radius-md);}
-  .about-photo img{width:100%;height:100%;object-fit:cover;aspect-ratio:5/4;}
+  .about-photo{border-radius:var(--radius-md);overflow:hidden;background:var(--ink);aspect-ratio:1/1;}
+  .about-photo video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 42%;
+  }
 
   .services-board{
     display:grid;grid-template-columns:1fr 1fr;
@@ -290,10 +312,10 @@
     display:flex;flex-direction:column;height:100%;
     border-radius:var(--radius-md);overflow:hidden;
   }
-  .service-core .sheen{flex:1 1 auto;min-height:320px;background:var(--ink);}
-  .service-core video{
+  .service-core .sheen{flex:1 1 auto;min-height:220px;}
+  .service-core img,.service-core video{
     position:absolute;inset:0;width:100%;height:100%;
-    object-fit:cover;object-position:center 42%;
+    object-fit:cover;object-position:center;display:block;
   }
   .service-core-copy{padding:28px 26px 26px;display:flex;flex-direction:column;gap:12px;flex:none;}
   .service-core-copy h3{font-size:var(--text-subhead);}
@@ -311,8 +333,10 @@
     text-transform:none;letter-spacing:0;font-weight:700;line-height:1.15;
   }
   .service-item p{color:var(--mute);font-size:var(--text-sm);font-weight:400;}
+  .service-core img,.service-core video{transition:transform 520ms var(--ease-out);}
   .service-item h3{transition:color 180ms ease;}
   @media (hover: hover) and (pointer: fine){
+    .service-core:hover img,.service-core:hover video{transform:scale(1.05);}
     .service-core:hover::before,
     .service-item:hover::before{animation-duration:2s;}
     .service-item:hover{background:var(--ink-3);}
@@ -320,43 +344,38 @@
   }
 
   .gallery{
-    display:grid;grid-template-columns:repeat(12,1fr);gap:14px;
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;
   }
-  .gallery-item{grid-column:span 4;border-radius:var(--radius-md);overflow:hidden;background:var(--ink-3);aspect-ratio:1/1;border:1px solid var(--red);}
-  .gallery-item.wide{grid-column:span 8;aspect-ratio:16/10;}
-  .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 560ms var(--ease-out);}
-  .gallery-item.placeholder{
-    display:flex;align-items:center;justify-content:center;
-    border:1px dashed var(--red);background:var(--ink-2);
-    color:var(--mute);font-family:'Tektur',sans-serif;
-    font-size:var(--text-caption);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-    transition:border-color 180ms ease, color 180ms ease;
+  .gallery-item{
+    margin:0;border-radius:var(--radius-md);overflow:hidden;background:var(--ink);
+    aspect-ratio:9/16;border:1px solid var(--red);
   }
-  @media (hover: hover) and (pointer: fine){
-    .gallery-item:hover img{transform:scale(1.06);}
-    .gallery-item.placeholder:hover{border-color:var(--red);color:var(--paper);}
+  .gallery-item.is-collapsed{display:none;}
+  .gallery-item video{
+    width:100%;height:100%;object-fit:cover;object-position:center;display:block;
   }
+  .gallery-actions{
+    display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:28px;
+  }
+  .gallery-ig{color:var(--mute);font-size:var(--text-sm);text-align:center;}
+  .gallery-ig a{color:var(--red);font-weight:700;}
+  .gallery-ig a:hover{color:var(--paper);}
   @media (max-width:820px){
-    .gallery{grid-template-columns:1fr 1fr;}
-    .gallery-item,.gallery-item.wide{grid-column:span 1;aspect-ratio:1/1;}
-    .gallery-item.wide{grid-column:span 2;aspect-ratio:16/10;}
-  }
-  @media (max-width:560px){
-    .gallery{grid-template-columns:1fr;}
-    .gallery-item,.gallery-item.wide{grid-column:span 1;aspect-ratio:4/3;}
+    .gallery{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
 
   .reviews{background:var(--ink-2);}
-  .reviews-row{
-    display:grid;grid-template-columns:44px minmax(0,1fr) 44px;
-    gap:16px;align-items:center;
-  }
+  .reviews-row{position:relative;}
   .review-viewport{
     overflow:hidden;container-type:inline-size;
+    mask-image:linear-gradient(90deg, transparent, var(--ink-2) 4%, var(--ink-2) 96%, transparent);
   }
   .review-track{
-    display:flex;gap:16px;
-    transition:transform 420ms var(--ease-out);
+    display:flex;width:max-content;
+    animation:reviews-scroll 90s linear infinite;
+  }
+  .review-set{
+    display:flex;gap:16px;padding-right:16px;
   }
   .review-card{
     flex:0 0 calc((100cqw - 32px) / 3);
@@ -383,19 +402,22 @@
   .read-more:hover{color:var(--paper);}
   .review-meta{font-size:var(--text-sm);color:var(--mute);margin-top:auto;}
   .review-meta strong{color:var(--paper);}
-  .review-nav{
-    width:44px;height:44px;border-radius:var(--radius-sm);
-    border:1px solid var(--line);background:var(--ink);color:var(--paper);
-    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-    justify-self:center;
+  .review-viewport:hover .review-track,
+  .review-viewport:focus-within .review-track,
+  .review-viewport.is-paused .review-track{
+    animation-play-state:paused;
   }
-  .review-nav:hover{border-color:var(--red);color:var(--red);}
-  .review-nav svg{display:block;}
+  @keyframes reviews-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
   @media (max-width:820px){
-    .review-card{flex-basis:100cqw;}
+    .review-card{flex-basis:calc(100cqw - 28px);}
   }
   @media (prefers-reduced-motion: reduce){
-    .review-track{transition:none;}
+    .review-track{animation:none;}
+    .review-set[aria-hidden="true"]{display:none;}
+    .review-viewport{mask-image:none;overflow-x:auto;}
   }
 
   .area-grid{
@@ -628,82 +650,47 @@
     <a class="logo" href="#home" aria-label="Giron Detailing home">
       <img src="assets/logo.png" alt="Giron Detailing" width="100" height="44">
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-        <path d="M0 1.5h22M0 8h22M0 14.5h22" stroke="currentColor" stroke-width="2"/>
-      </svg>
-    </button>
     <div class="nav-links" id="navLinks">
       <a href="#work">Work</a>
       <a href="#services">Services</a>
       <a href="#area">Area</a>
       <a href="#reviews">Reviews</a>
-      <a href="#contact" class="btn">Get a quote</a>
+      <a href="#contact" class="btn nav-quote-menu">Get a quote</a>
     </div>
+    <a href="#contact" class="btn nav-quote">Get a quote</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+        <path d="M0 1.5h22M0 8h22M0 14.5h22" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
   </nav>
 </header>
 
 <section class="hero" id="home">
   <div class="hero-media">
-    <img
-      src="assets/hero.jpg"
-      srcset="assets/hero-poster.jpg 1400w, assets/hero.jpg 1920w"
-      sizes="100vw"
-      width="1920"
-      height="1280"
-      alt="Porsche 911 Turbo S Cabriolet in the bay during a Giron Detailing session"
-      fetchpriority="high"
+    <video
+      class="hero-video"
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster="assets/hero-video.jpg"
+      aria-hidden="true"
     >
+      <source src="assets/hero-video.mp4" type="video/mp4">
+    </video>
   </div>
+  <p class="hero-eyebrow">SHINE · PROTECTION · PERFECTION</p>
   <div class="hero-content">
     <div class="hero-copy">
-      <p class="hero-eyebrow">SHINE · PROTECTION · PERFECTION</p>
+      <img class="hero-logo" src="assets/logo.png" alt="Giron Detailing" width="164" height="72">
       <h1>Showroom shine.<br>We come to you.</h1>
       <p class="lede">Interior and exterior detailing for enthusiast cars and consignment vehicles in Trenton.</p>
       <div class="hero-ctas">
         <a class="btn" href="#contact">Get a quote</a>
-        <a class="btn ghost" href="tel:+16096323712">Call 609-632-3712</a>
+        <a class="btn" href="tel:+16096323712">Call 609-632-3712</a>
       </div>
     </div>
-    <aside class="quote-form" id="heroQuoteForm" aria-label="Request a quote">
-      <form class="interest-form">
-        <div class="form-fields">
-          <h3 class="form-title">Request a quote</h3>
-          <p class="form-note">Name, phone, and the job are enough.</p>
-          <div class="field">
-            <label for="hero-name">Name</label>
-            <input id="hero-name" name="name" type="text" autocomplete="name" required placeholder="Your name">
-          </div>
-          <div class="field">
-            <label for="hero-phone">Phone</label>
-            <input id="hero-phone" name="phone" type="tel" autocomplete="tel" required placeholder="(609) 555-0100">
-          </div>
-          <div class="field">
-            <label for="hero-job">Service</label>
-            <select id="hero-job" name="job" required>
-              <option value="" disabled selected>Select A Service</option>
-              <option>Mobile Auto Detailing</option>
-              <option>Hand Wash &amp; Wax</option>
-              <option>Interior Detail</option>
-              <option>Exterior Detail</option>
-              <option>Headlight Restoration</option>
-              <option>Water Damage Repair</option>
-              <option>Something Else</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="hero-details">Vehicle and location</label>
-            <textarea id="hero-details" name="details" placeholder="Make, model, and where we should meet you"></textarea>
-          </div>
-          <p class="form-error" role="alert"></p>
-          <button class="btn full" type="submit">Send quote request</button>
-        </div>
-        <div class="form-success">
-          <h3>Request noted.</h3>
-          <p>If this is a phone, your messages app should be open. If not, call 609-632-3712.</p>
-        </div>
-      </form>
-    </aside>
   </div>
 </section>
 
@@ -759,7 +746,17 @@
       <p>No shop to drop off at. The team brings the water and equipment straight to you.</p>
     </div>
     <div class="about-photo sheen">
-      <img src="assets/work-console.jpg" width="1200" height="800" alt="Detailer wiping a tan leather center console" loading="lazy">
+      <video
+        class="about-video"
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="assets/service-mobile.jpg"
+        aria-label="Giron Detailing van on a driveway next to a Range Rover"
+      >
+        <source src="assets/service-mobile.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </section>
@@ -779,10 +776,10 @@
             loop
             playsinline
             preload="metadata"
-            poster="assets/service-mobile.jpg"
-            aria-label="Giron Detailing van on a driveway next to a Range Rover"
+            poster="assets/service-core.jpg"
+            aria-label="Giron Detailing van and technician detailing a car in a driveway"
           >
-            <source src="assets/service-mobile.mp4" type="video/mp4">
+            <source src="assets/service-core.mp4" type="video/mp4">
           </video>
         </div>
         <div class="service-core-copy">
@@ -838,14 +835,39 @@
       <h2>Our work</h2>
       <p>Recent work, straight from the driveway.</p>
     </div>
-    <div class="gallery">
-      <figure class="gallery-item wide sheen">
-        <img src="assets/gallery-porsche.jpg" width="1600" height="1000" alt="Black Porsche 911 with a high-gloss finish after detailing" loading="lazy">
-      </figure>
-      <figure class="gallery-item placeholder" aria-label="Photo placeholder">Photo coming</figure>
-      <figure class="gallery-item placeholder" aria-label="Photo placeholder">Photo coming</figure>
-      <figure class="gallery-item placeholder" aria-label="Photo placeholder">Photo coming</figure>
-      <figure class="gallery-item wide placeholder" aria-label="Photo placeholder">Photo coming</figure>
+    <div class="gallery" id="workGallery">
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-01.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-01.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-02.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-02.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-03.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-03.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-04.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-04.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-05.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-05.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-06.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-06.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-07.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-07.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-08.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-08.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-09.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-09.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-10.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-10.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-11.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-11.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-12.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-12.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-13.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-13.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-14.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-14.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-15.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-15.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-16.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-16.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-17.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-17.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-18.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-18.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-19.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-19.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-20.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-20.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-21.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-21.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-22.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-22.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-23.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-23.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-24.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-24.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-25.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-25.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-26.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-26.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-27.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-27.mp4" type="video/mp4"></video></figure>
+      <figure class="gallery-item is-collapsed"><video class="gallery-video" muted loop playsinline preload="none" poster="assets/work/work-28.jpg" aria-label="Giron Detailing work"><source data-src="assets/work/work-28.mp4" type="video/mp4"></video></figure>
+    </div>
+    <div class="gallery-actions">
+      <button type="button" class="btn ghost gallery-more" id="galleryMore">Show more</button>
+      <p class="gallery-ig">Want to see more? Check out our <a href="https://www.instagram.com/detailing_giron_1/" target="_blank" rel="noopener noreferrer">Instagram</a>.</p>
     </div>
   </div>
 </section>
@@ -857,11 +879,9 @@
       <p>4.8 stars from 25 reviews on Google.</p>
     </div>
     <div class="reviews-row">
-      <button type="button" class="review-nav prev" data-dir="-1" aria-label="Previous reviews">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
       <div class="review-viewport" id="reviewsViewport">
         <div class="review-track" id="reviewsTrack">
+          <div class="review-set">
           <article class="review-card">
             <div class="stars" aria-label="5 stars">★★★★★</div>
             <blockquote class="review-quote">Excellent service. Highly recommended.</blockquote>
@@ -958,11 +978,9 @@
             <div class="review-actions"><button type="button" class="read-more" hidden>Read more</button></div>
             <p class="review-meta"><strong>Nicholas L.</strong></p>
           </article>
+          </div>
         </div>
       </div>
-      <button type="button" class="review-nav next" data-dir="1" aria-label="Next reviews">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
     </div>
   </div>
 </section>
@@ -1131,14 +1149,23 @@
 
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
+  const header = document.querySelector('header.site');
+  function setHeaderSolid() {
+    const solid = window.scrollY > 16 || links.classList.contains('open');
+    header.classList.toggle('is-solid', solid);
+  }
   toggle.addEventListener('click', () => {
     const open = links.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    setHeaderSolid();
   });
   links.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
     links.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
+    setHeaderSolid();
   }));
+  window.addEventListener('scroll', setHeaderSolid, { passive: true });
+  setHeaderSolid();
 
   document.querySelectorAll('.interest-form').forEach((form) => {
     form.addEventListener('submit', (e) => {
@@ -1174,7 +1201,35 @@
     });
   });
 
-  (function initServiceVideo() {
+  (function initHeroVideo() {
+    const video = document.querySelector('.hero-video');
+    if (!video) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.2 });
+    io.observe(video);
+  })();
+
+  (function initAboutVideo() {
+    const video = document.querySelector('.about-video');
+    if (!video) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.35 });
+    io.observe(video);
+  })();
+
+  (function initServiceCoreVideo() {
     const video = document.querySelector('.service-core-video');
     if (!video) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1188,6 +1243,48 @@
     io.observe(video);
   })();
 
+  (function initWorkGallery() {
+    const gallery = document.getElementById('workGallery');
+    const more = document.getElementById('galleryMore');
+    if (!gallery || !more) return;
+    const items = [...gallery.querySelectorAll('.gallery-item')];
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STEP = 4;
+
+    function attach(video) {
+      const source = video.querySelector('source');
+      if (!source || source.src || !source.dataset.src) return;
+      source.src = source.dataset.src;
+      video.load();
+    }
+
+    const io = reduced ? null : new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.45 });
+
+    function enable(item) {
+      const video = item.querySelector('.gallery-video');
+      if (!video) return;
+      attach(video);
+      if (io) io.observe(video);
+    }
+
+    items.filter((item) => !item.classList.contains('is-collapsed')).forEach(enable);
+
+    more.addEventListener('click', () => {
+      const hidden = items.filter((item) => item.classList.contains('is-collapsed'));
+      hidden.slice(0, STEP).forEach((item) => {
+        item.classList.remove('is-collapsed');
+        enable(item);
+      });
+      if (!items.some((item) => item.classList.contains('is-collapsed'))) more.hidden = true;
+    });
+  })();
+
   document.querySelectorAll('.faq-q').forEach((btn) => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -1199,54 +1296,30 @@
   (function initReviews() {
     const viewport = document.getElementById('reviewsViewport');
     const track = document.getElementById('reviewsTrack');
-    if (!viewport || !track) return;
-    const cards = [...track.children];
+    const set = track && track.querySelector('.review-set');
+    if (!viewport || !track || !set) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let index = 0;
-    let timer = null;
 
-    cards.forEach((card) => {
+    function bindCard(card) {
       const quote = card.querySelector('.review-quote');
       const more = card.querySelector('.read-more');
       if (!quote || !more) return;
-      if (quote.scrollHeight > quote.clientHeight + 2) {
-        more.hidden = false;
-      }
+      if (quote.scrollHeight > quote.clientHeight + 2) more.hidden = false;
       more.addEventListener('click', () => {
         const open = card.classList.toggle('is-open');
         more.textContent = open ? 'Read less' : 'Read more';
+        viewport.classList.toggle('is-paused', Boolean(track.querySelector('.is-open')));
       });
-    });
-
-    function visibleCount() {
-      return window.matchMedia('(max-width:820px)').matches ? 1 : 3;
-    }
-    function maxIndex() {
-      return Math.max(0, cards.length - visibleCount());
-    }
-    function go(i) {
-      const span = maxIndex() + 1;
-      index = ((i % span) + span) % span;
-      track.style.transform = 'translateX(-' + cards[index].offsetLeft + 'px)';
-    }
-    function play() {
-      if (reduced) return;
-      stop();
-      timer = setInterval(() => go(index + 1), 7000);
-    }
-    function stop() {
-      if (timer) clearInterval(timer);
-      timer = null;
     }
 
-    document.querySelectorAll('.review-nav').forEach((btn) => {
-      btn.addEventListener('click', () => go(index + Number(btn.dataset.dir)));
-    });
-    viewport.addEventListener('pointerenter', stop);
-    viewport.addEventListener('pointerleave', play);
-    window.addEventListener('resize', () => go(index));
-    go(0);
-    play();
+    [...set.querySelectorAll('.review-card')].forEach(bindCard);
+
+    if (reduced) return;
+    const clone = set.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('button').forEach((btn) => btn.setAttribute('tabindex', '-1'));
+    [...clone.querySelectorAll('.review-card')].forEach(bindCard);
+    track.appendChild(clone);
   })();
 
   (async function initMap() {
