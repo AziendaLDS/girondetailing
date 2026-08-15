@@ -10,6 +10,7 @@
 <link rel="preload" as="font" href="assets/fonts/Tektur-Variable.ttf" type="font/ttf" crossorigin>
 <link rel="preload" as="image" href="assets/hero-video.jpg" media="(min-width:821px)">
 <link rel="preload" as="image" href="assets/hero-video-mobile.jpg" media="(max-width:820px)">
+<link rel="preload" as="video" href="assets/hero-video-mobile.mp4" media="(max-width:820px)" fetchpriority="high" type="video/mp4">
 <script type="importmap">
 {
   "imports": {
@@ -459,6 +460,13 @@
     scroll-snap-align:start;
     scroll-snap-stop:always;
   }
+  /* The last card snaps to the end edge instead of the start edge, so the
+     browser always has a valid snap point flush with true max scroll. Without
+     this, sub-pixel rounding across 16 cards can leave the final card just
+     shy of reachable, stranding the native scrollbar before the end. */
+  .review-viewport.is-swipe .review-card:last-child{
+    scroll-snap-align:end;
+  }
   /* Card count is driven by the viewport's own rendered width (container query),
      not device orientation, so it can't drift out of sync with what actually fits. */
   @container reviews (min-width:560px){
@@ -820,10 +828,9 @@
       class="hero-video hero-video--desktop"
       muted
       loop
-      autoplay
       playsinline
       webkit-playsinline
-      preload="metadata"
+      preload="none"
       poster="assets/hero-video.jpg"
       disablepictureinpicture
       aria-hidden="true"
@@ -834,13 +841,13 @@
       class="hero-video hero-video--mobile"
       muted
       loop
-      autoplay
       playsinline
       webkit-playsinline
-      preload="metadata"
+      preload="none"
       poster="assets/hero-video-mobile.jpg"
       disablepictureinpicture
       aria-hidden="true"
+      fetchpriority="high"
     >
       <source src="assets/hero-video-mobile.mp4" type="video/mp4">
     </video>
