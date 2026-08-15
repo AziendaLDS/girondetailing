@@ -401,7 +401,7 @@
   .reviews{background:var(--ink-2);}
   .reviews-row{position:relative;}
   .review-viewport{
-    overflow:hidden;container-type:inline-size;
+    overflow:hidden;container-type:inline-size;container-name:reviews;
     mask-image:linear-gradient(90deg, transparent, var(--ink-2) 4%, var(--ink-2) 96%, transparent);
   }
   .review-track{
@@ -453,31 +453,24 @@
   }
   .review-viewport.is-swipe .review-track{animation:none;width:max-content;}
   .review-viewport.is-swipe .review-set[aria-hidden="true"]{display:none;}
+  .review-viewport.is-swipe .review-set{gap:0;padding-right:0;}
   .review-viewport.is-swipe .review-card{
-    flex-basis:calc(100cqw - 32px);
+    flex-basis:100cqw;
     scroll-snap-align:start;
+    scroll-snap-stop:always;
   }
-  @media (max-width:640px){
-    .review-viewport.is-swipe .review-set{gap:0;padding-right:0;}
-    .review-viewport.is-swipe .review-card{
-      flex-basis:100cqw;
-      scroll-snap-align:start;
-      scroll-snap-stop:always;
-    }
-  }
-  /* Tablet portrait: 2 reviews visible */
-  @media (min-width:641px) and (max-width:1024px) and (orientation:portrait){
-    .review-viewport.is-swipe{mask-image:none;}
+  /* Card count is driven by the viewport's own rendered width (container query),
+     not device orientation, so it can't drift out of sync with what actually fits. */
+  @container reviews (min-width:560px){
     .review-viewport.is-swipe .review-set{gap:16px;padding-right:0;}
     .review-card,
     .review-viewport.is-swipe .review-card{
       flex-basis:calc((100cqw - 16px) / 2);
       scroll-snap-align:start;
+      scroll-snap-stop:normal;
     }
   }
-  /* Tablet landscape: 3 reviews visible (min-height excludes phone landscape) */
-  @media (min-width:641px) and (max-width:1366px) and (min-height:500px) and (orientation:landscape){
-    .review-viewport.is-swipe{mask-image:none;}
+  @container reviews (min-width:900px){
     .review-viewport.is-swipe .review-set{gap:16px;padding-right:0;}
     .review-card,
     .review-viewport.is-swipe .review-card{
@@ -1643,12 +1636,25 @@
     const set = track && track.querySelector('.review-set');
     if (!viewport || !track || !set) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cards = [];
+
+    function measureCard(card) {
+      const quote = card.querySelector('.review-quote');
+      const more = card.querySelector('.read-more');
+      if (!quote || !more || card.classList.contains('is-open')) return;
+      more.hidden = quote.scrollHeight <= quote.clientHeight + 2;
+    }
+
+    function measureAll() {
+      cards.forEach(measureCard);
+    }
 
     function bindCard(card) {
       const quote = card.querySelector('.review-quote');
       const more = card.querySelector('.read-more');
       if (!quote || !more) return;
-      if (quote.scrollHeight > quote.clientHeight + 2) more.hidden = false;
+      cards.push(card);
+      measureCard(card);
       more.addEventListener('click', () => {
         const open = card.classList.toggle('is-open');
         more.textContent = open ? 'Read less' : 'Read more';
@@ -1660,12 +1666,31 @@
 
     const swipe = window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
     if (swipe) viewport.classList.add('is-swipe');
-    if (reduced || swipe) return;
-    const clone = set.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    clone.querySelectorAll('button').forEach((btn) => btn.setAttribute('tabindex', '-1'));
-    [...clone.querySelectorAll('.review-card')].forEach(bindCard);
-    track.appendChild(clone);
+    if (!reduced && !swipe) {
+      const clone = set.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('button').forEach((btn) => btn.setAttribute('tabindex', '-1'));
+      [...clone.querySelectorAll('.review-card')].forEach(bindCard);
+      track.appendChild(clone);
+    }
+
+    // The clamp check above can be measured against fallback-font metrics or a
+    // card width that hasn't settled yet, so recheck once the webfont swaps in
+    // and whenever the viewport's width actually changes (rotation, breakpoint
+    // change, browser chrome resizing).
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measureAll).catch(() => {});
+    }
+    let resizeTimer = 0;
+    const scheduleMeasure = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(measureAll, 150);
+    };
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(scheduleMeasure).observe(viewport);
+    } else {
+      window.addEventListener('resize', scheduleMeasure, { passive: true });
+    }
   })();
 
   (async function initMap() {
